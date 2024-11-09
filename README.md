@@ -247,7 +247,7 @@ SELECT
  FROM logical_table_model AS model 
  JOIN native_stories_1M AS stories ON stories."num" <=model.aux_size
 ORDER BY stories."num";
-``
+```
 
 Example of fetching data from a logical table:
 ```SQL
