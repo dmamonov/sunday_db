@@ -7,6 +7,8 @@ CREATE SCHEMA IF NOT EXISTS sunday_db;
 SET search_path TO sunday_db;
 ```
 
+## Native Example (baseline)
+
 Create an auxallary function to generate random values for text fields:
 ```SQL
 CREATE OR REPLACE FUNCTION generate_pseudo_text(target_length INTEGER) 
@@ -142,3 +144,5 @@ SELECT
 	round( 100/      500.*1000,3) AS "500=", 
 	round(  76/      100.*1000,3) AS "100="
 ```
+
+## Dynamic Model Example (array based)
