@@ -98,3 +98,17 @@ CREATE TABLE native_stories_500  AS SELECT * FROM native_stories_1M WHERE "num"<
 CREATE TABLE native_stories_100  AS SELECT * FROM native_stories_1M WHERE "num"<=      100;
 ```
 
+Native table row count and storage size statistics:
+|  1M|~600MB|
+|500K|~300K|
+|100K|~100MB|
+| 50K|~31MB|
+| 25K|~15MB|
+| 10K|~6MB|
+|  5K|~3MB|
+|  1K|~1MB|
+|500 |~512KB|
+|100 |~64KB|
+
+
+
