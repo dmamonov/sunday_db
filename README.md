@@ -147,6 +147,9 @@ SELECT
 
 ## Dynamic Model Example (array based)
 
+Logical model (in contrast to native) is a model of a fixed tables structure 
+desinged to represent various (dynamic) table models. 
+
 Cleanup script:
 ```SQL
 DROP TABLE IF EXISTS index_data;
@@ -158,26 +161,71 @@ DROP TABLE IF EXISTS table_definition;
 
 Logical table model:
 ```SQL
-CREATE TABLE table_definition (
-	id bigint not null primary key,
+CREATE TABLE logical_table_model (
+	id bigserial not null primary key,
 	table_name text not null
 );
 ```
 
 Filling with data:
 ```SQL
-INSERT INTO table_definition (id, table_name) VALUES
-			(      100, 'Stories_100'),
-			(      500, 'Stories_500'),
-			(    1_000, 'Stories_1K'),
-			(    5_000, 'Stories_5K'),
-			(   10_000, 'Stories_10K'),
-			(   25_000, 'Stories_25K'),
-			(   50_000, 'Stories_50K'),
-			(  100_000, 'Stories_100K'),
-			(  500_000, 'Stories_500K'),
-			(1_000_000, 'Stories_1M');
+INSERT INTO logical_table_model (table_name) VALUES 
+			('Stories_100'),
+			('Stories_500'),
+			('Stories_1K'),
+			('Stories_5K'),
+			('Stories_10K'),
+			('Stories_25K'),
+			('Stories_50K'),
+			('Stories_100K'),
+			('Stories_500K'),
+			('Stories_1M');
 ```
+
+Check content:
+```SQL
+SELECT * FROM logical_table_model ORDER BY id;
+```
+
+Creating logical column model:
+```SQL
+CREATE TABLE logical_column_model (
+	id bigserial not null primary key,
+	table_id bigint not null references logical_table_model (id),
+	column_name text not null,
+	storage_offset integer not null -- starting from 1.
+);
+```
+
+Creating 10 logical columns per each logical table:
+```SQL
+INSERT INTO logical_column_model (table_id, column_name, storage_offset)
+SELECT "table".id, "column"."name", "column"."offset"
+  FROM logical_table_model AS "table"
+  JOIN (VALUES 
+	       ('NUM',          1), -- Ordinal mumber of the story (integer)
+	       ('TITLE',        2), -- Title of the story (text)
+	       ('EPIC',         3), -- Epic category associated with the story (text)
+	       ('DESCRIPTION',  4), -- Detailed description of the story (text)
+	       ('CREATED_DATE', 5), -- Date when the story was created (date)
+	       ('DUE_DATE',     6), -- Due date for the story (date)
+	       ('STATUS',       7), -- Status of the story (e.g., "In Progress") (text)
+	       ('PRIORITY',     8), -- Priority level of the story (integer)
+	       ('COMPLEXITY',   9), -- Numeric estimate of complexity (numeric)
+	       ('IS_ACTIVE',   10)  -- Flag indicating if the story is active (boolean)
+	   ) AS "column"("name", "offset") ON 1=1;
+```
+
+Creating logical row:
+```
+CREATE TABLE logical_row (
+	id bigserial not null primary key,
+	table_id bigint not null references logical_table_model (id),
+	cells text[] not null -- alternatively you may use JSON/JSONB
+);
+```
+
+
 
 
 
