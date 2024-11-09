@@ -286,6 +286,43 @@ SELECT
  ORDER BY "num";
 ```
 
+Create logical index model:
+```SQL
+CREATE TABLE logical_index_model (
+	id bigserial not null primary key,
+	table_id bigint not null references logical_table_model (id),
+	column_id bigint not null references logical_column_model (id)
+);
+```
+
+Create example logical index:
+```SQL
+INSERT INTO logical_index_model (table_id, column_id)
+SELECT 
+	table_id, 
+	id AS column_id 
+  FROM logical_column_model 
+ WHERE table_id=(SELECT id FROM logical_table_model WHERE table_name='Stories_100K')
+   AND column_name='COMPLEXITY';
+
+-- check data:
+SELECT * FROM logical_index_model;
+```
+
+Create logicl index data storage (actual values that will be indexed):
+```SQL
+CREATE TABLE logical_index_data (
+	index_id bigint not null,
+	row_id bigint not null references logical_row_data(id),
+	cell text null,
+	PRIMARY KEY(index_id, row_id)
+);
+CREATE INDEX i_logical_index_data__index_id__cell ON logical_index_data(index_id, cell);
+```
+
+
+
+
 
 
 
