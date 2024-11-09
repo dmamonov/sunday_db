@@ -104,7 +104,7 @@ Native table row count and storage size statistics:
 | ---: | -----: |
 |   1M | ~600MB |
 | 500K | ~300K  |
-| 100K | ~100MB |
+| 100K | ~60MB |
 |  50K | ~31MB  |
 |  25K | ~15MB  |
 |  10K | ~6MB   |
