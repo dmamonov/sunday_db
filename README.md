@@ -166,8 +166,8 @@ CREATE TABLE table_definition (
 
 Filling with data:
 ```SQL
-INSERT INTO table_definition (id, table_name) 
-	 VALUES (      100, 'Stories_100'),
+INSERT INTO table_definition (id, table_name) VALUES
+			(      100, 'Stories_100'),
 			(      500, 'Stories_500'),
 			(    1_000, 'Stories_1K'),
 			(    5_000, 'Stories_5K'),
