@@ -172,7 +172,7 @@ SELECT * FROM native_stories_100k_indexed WHERE complexity=99 ORDER BY "num";
 ```
 
 
-## Dynamic Model Example (array based)
+## Logical Tables
 
 Logical model (in contrast to native) is a model of a fixed tables structure 
 desinged to represent various (dynamic) table models. 
