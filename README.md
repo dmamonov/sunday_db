@@ -152,34 +152,35 @@ desinged to represent various (dynamic) table models.
 
 Cleanup script:
 ```SQL
-DROP TABLE IF EXISTS index_data;
-DROP TABLE IF EXISTS index_definition;
-DROP TABLE IF EXISTS table_row;
-DROP TABLE IF EXISTS column_definition;
-DROP TABLE IF EXISTS table_definition;
+DROP TABLE IF EXISTS logical_index_data;
+DROP TABLE IF EXISTS logical_index_model;
+DROP TABLE IF EXISTS logical_row_data;
+DROP TABLE IF EXISTS logical_column_model;
+DROP TABLE IF EXISTS logical_table_model;
 ```
 
 Logical table model:
 ```SQL
 CREATE TABLE logical_table_model (
 	id bigserial not null primary key,
-	table_name text not null
+	table_name text not null,
+	aux_size integer default 0
 );
 ```
 
 Filling with data:
 ```SQL
-INSERT INTO logical_table_model (table_name) VALUES 
-			('Stories_100'),
-			('Stories_500'),
-			('Stories_1K'),
-			('Stories_5K'),
-			('Stories_10K'),
-			('Stories_25K'),
-			('Stories_50K'),
-			('Stories_100K'),
-			('Stories_500K'),
-			('Stories_1M');
+INSERT INTO logical_table_model (table_name, aux_size) VALUES 
+			('Stories_100',       100),
+			('Stories_500',       500),
+			('Stories_1K',      1_000),
+			('Stories_5K',      5_000),
+			('Stories_10K',    10_000),
+			('Stories_25K',    25_000),
+			('Stories_50K',    50_000),
+			('Stories_100K',  100_000),
+			('Stories_500K',  500_000),
+			('Stories_1M',  1_000_000);
 ```
 
 Check content:
