@@ -146,3 +146,38 @@ SELECT
 ```
 
 ## Dynamic Model Example (array based)
+
+Cleanup script:
+```SQL
+DROP TABLE IF EXISTS index_data;
+DROP TABLE IF EXISTS index_definition;
+DROP TABLE IF EXISTS table_row;
+DROP TABLE IF EXISTS column_definition;
+DROP TABLE IF EXISTS table_definition;
+```
+
+Logical table model:
+```SQL
+CREATE TABLE table_definition (
+	id bigint not null primary key,
+	table_name text not null
+);
+```
+
+Filling with data:
+```SQL
+INSERT INTO table_definition (id, table_name) 
+	 VALUES (      100, 'Stories_100'),
+			(      500, 'Stories_500'),
+			(    1_000, 'Stories_1K'),
+			(    5_000, 'Stories_5K'),
+			(   10_000, 'Stories_10K'),
+			(   25_000, 'Stories_25K'),
+			(   50_000, 'Stories_50K'),
+			(  100_000, 'Stories_100K'),
+			(  500_000, 'Stories_500K'),
+			(1_000_000, 'Stories_1M');
+```
+
+
+
