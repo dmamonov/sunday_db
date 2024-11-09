@@ -217,7 +217,7 @@ SELECT "table".id, "column"."name", "column"."offset"
 ```
 
 Creating logical row:
-```
+```SQL
 CREATE TABLE logical_row (
 	id bigserial not null primary key,
 	table_id bigint not null references logical_table_model (id),
@@ -225,6 +225,9 @@ CREATE TABLE logical_row (
 );
 ```
 
+Fill logical tables with example data:
+```
+``
 
 
 
