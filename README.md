@@ -332,6 +332,33 @@ SELECT
   JOIN logical_row_data AS "row" ON "row".table_id="index".table_id;
 ```
 
+Selecting data using index:
+```SQL
+WITH 
+	"table" AS (SELECT id FROM logical_table_model WHERE table_name='Stories_100K'),
+	"column" AS (SELECT id FROM logical_column_model WHERE table_id=(SELECT id FROM "table") AND column_name='COMPLEXITY'),
+	"index" AS (SELECT id FROM logical_index_model WHERE table_id=(SELECT id FROM "table") AND column_id=(SELECT id FROM "column"))
+SELECT 
+ 	cells[1] as "num", 
+	cells[2] as "title", 
+	cells[3] as "epic", 
+	LEFT(cells[4],50)||'...' as "description_brief", 
+	cells[5] as "created_date",
+	cells[6] as "due_date", 
+	cells[7] as "status", 
+	cells[8] as "priority", 
+	cells[9] as "complexity", 
+	cells[10] as "is_active"
+  FROM logical_row_data
+ WHERE table_id=(SELECT id FROM logical_table_model WHERE table_name='Stories_100K')
+   AND id IN (
+		SELECT row_id 
+		  FROM logical_index_data 
+	     WHERE index_id=(SELECT id FROM "index")
+	       AND cell='99')
+   -- AND cells[9]='99' -- complexity
+ ORDER BY "num";
+```
 
 
 
