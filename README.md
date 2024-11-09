@@ -320,6 +320,19 @@ CREATE TABLE logical_index_data (
 CREATE INDEX i_logical_index_data__index_id__cell ON logical_index_data(index_id, cell);
 ```
 
+Index actual data:
+```SQL
+INSERT INTO logical_index_data("index_id", "row_id", "cell")
+SELECT 
+    "index".id AS "index_id",
+    "row".id AS "row_id",
+    "row".cells["column".storage_offset] AS "cell"
+  FROM logical_index_model AS "index"
+  JOIN logical_column_model AS "column" ON "column".id="index".column_id
+  JOIN logical_row_data AS "row" ON "row".table_id="index".table_id;
+```
+
+
 
 
 
