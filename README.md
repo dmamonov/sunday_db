@@ -100,18 +100,45 @@ CREATE TABLE native_stories_100  AS SELECT * FROM native_stories_1M WHERE "num"<
 
 Native table row count and storage size statistics:
 
-| ROWS | BYTES  |
-| ---: | -----: |
-|   1M | ~600MB |
-| 500K | ~300K  |
-| 100K | ~60MB |
-|  50K | ~31MB  |
-|  25K | ~15MB  |
-|  10K | ~6MB   |
-|   5K | ~3MB   |
-|   1K | ~1MB   |
-| 500  | ~512KB |
-| 100  | ~64KB  |
+| ROWS | BYTES  | FETCH 1000 (x5 times)        | AVG MS | MS/1000 ROWS  | 
+| ---: | -----: | ---------------------------: | -----: | ------------: |
+|   1M | ~600MB | 3038, 2546, 3227, 2740, 2499 | 2810   |   2.810       | 
+| 500K | ~300K  | 4518, 1682, 1373, 2027, 2484 | 2416   |   4.832       |
+| 100K | ~60MB  |  827,  312,  555,  689,  536 |  583   |   5.830       |
+|  50K | ~31MB  |  449,  207,  153,  292,  211 |  262   |   5.240       |
+|  25K | ~15MB  |  168,  178,  254,  180,  109 |  177   |   7.080       |
+|  10K | ~6MB   |  166,  120,   94,  163,  100 |  128   |  12.800       |
+|   5K | ~3MB   |  160,  122,   86,  144,   99 |  122   |  24.400       |
+|   1K | ~1MB   |  131,  146,  145,  117,   89 |  125   | 125.000       |
+| 500  | ~512KB |   94,  122,   82,   93,  112 |  100   | 200.000       |
+| 100  | ~64KB  |   10,   70,   81,  143,   80 |   76   | 760.000       |
 
+So in average, a record takes ~600 bytes of native storage.
 
-
+A script to calculate avg statistics:
+```SQL
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[3038, 2546, 3227, 2740, 2499]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[4518, 1682, 1373, 2027, 2484]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[827,  312,  555,  689,  536]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[449,  207,  153,  292,  211]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[168,  178,  254,  180,  109]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[166,  120,   94,  163,  100]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[160,  122,   86,  144,   99]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[131,  146,  145,  117,   89]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[94,  122,   82,   93,  112]) AS value;
+SELECT AVG(value) AS average FROM UNNEST(ARRAY[10,   70,   81,  143,   80]) AS value;
+```
+A script to calculate `MS/100 ROWS`:
+```SQL
+SELECT 
+	round(2810/1_000_000.*1000,3) AS "1M", 
+	round(2416/  500_000.*1000,3) AS "500K",
+	round( 583/  100_000.*1000,3) AS "100K", 
+	round( 262/   50_000.*1000,3) AS "50K", 
+	round( 177/   25_000.*1000,3) AS "25K", 
+	round( 128/   10_000.*1000,3) AS "10K", 
+	round( 122/    5_000.*1000,3) AS "5K", 
+	round( 125/    1_000.*1000,3) AS "1K", 
+	round( 100/      500.*1000,3) AS "500=", 
+	round(  76/      100.*1000,3) AS "100="
+```
