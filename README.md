@@ -1,4 +1,4 @@
-# sunday_db
+# sundayDB
 
 Create and activate playground schema:
 ```SQL
