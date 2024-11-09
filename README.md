@@ -145,6 +145,33 @@ SELECT
 	round(  76/      100.*1000,3) AS "100="
 ```
 
+## Indexed native table
+
+For 5k items:
+```SQL
+CREATE TABLE native_stories_5k_indexed AS SELECT * FROM native_stories_5k;
+CREATE INDEX i_native_stories_5k_indexed__complexity ON native_stories_5k_indexed(complexity);
+
+SELECT * FROM native_stories_5k WHERE complexity=99 ORDER BY "num";
+-- 115, 130, 108, 97, 163, 71
+
+SELECT * FROM native_stories_5k_indexed WHERE complexity=99 ORDER BY "num";
+-- 112, 97, 179, 95, 81, 171
+```
+
+For 100k items:
+```SQL
+CREATE TABLE native_stories_100k_indexed AS SELECT * FROM native_stories_100k;
+CREATE INDEX i_native_stories_100k_indexed__complexity ON native_stories_100k_indexed(complexity);
+
+SELECT * FROM native_stories_100k WHERE complexity=99 ORDER BY "num";
+-- 191, 148 108, 167, 95, 136
+
+SELECT * FROM native_stories_100k_indexed WHERE complexity=99 ORDER BY "num";
+-- 73, 107, 96, 84, 139 82
+```
+
+
 ## Dynamic Model Example (array based)
 
 Logical model (in contrast to native) is a model of a fixed tables structure 
