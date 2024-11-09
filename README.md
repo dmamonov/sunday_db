@@ -249,6 +249,22 @@ SELECT
 ORDER BY stories."num";
 ``
 
-
+Example of fetching data from a logical table:
+```SQL
+SELECT 
+ 	cells[1] as "num", 
+	cells[2] as "title", 
+	cells[3] as "epic", 
+	LEFT(cells[4],50)||'...' as "description_brief", 
+	cells[5] as "created_date",
+	cells[6] as "due_date", 
+	cells[7] as "status", 
+	cells[8] as "priority", 
+	cells[9] as "complexity", 
+	cells[10] as "is_active"
+  FROM logical_row_data 
+ WHERE table_id=(SELECT id FROM logical_table_model WHERE table_name='Stories_100')
+ ORDER BY "num";
+```
 
 
