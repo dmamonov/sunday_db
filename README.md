@@ -219,15 +219,34 @@ SELECT "table".id, "column"."name", "column"."offset"
 
 Creating logical row:
 ```SQL
-CREATE TABLE logical_row (
+CREATE TABLE logical_row_data (
 	id bigserial not null primary key,
 	table_id bigint not null references logical_table_model (id),
 	cells text[] not null -- alternatively you may use JSON/JSONB
 );
+CREATE INDEX i_logical_row_data__table_id ON logical_row_data(table_id);
 ```
 
 Fill logical tables with example data:
-```
+```SQL
+INSERT INTO logical_row_data (table_id, cells)
+SELECT 
+	model.id AS table_id,
+	ARRAY[
+		"num"::text,
+		"title",
+		"epic",
+		"description",
+		"created_date"::text,
+		"due_date"::text,
+		"status",
+		"priority"::text,
+		"complexity"::text,
+		"is_active"::text
+	] AS "cells"
+ FROM logical_table_model AS model 
+ JOIN native_stories_1M AS stories ON stories."num" <=model.aux_size
+ORDER BY stories."num";
 ``
 
 
