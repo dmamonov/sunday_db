@@ -1,5 +1,11 @@
 # sundayDB
 
+This is an ellistrative example of key concepts sufficient to build a low latency logical database on top of the relational model.
+
+This example is based on PostgreSQL, but it could be adapted to MySQL as well.
+
+## Setting up the schema
+
 Create and activate playground schema:
 ```SQL
 CREATE SCHEMA IF NOT EXISTS sunday_db;
