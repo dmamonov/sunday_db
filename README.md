@@ -170,6 +170,20 @@ CREATE TABLE native_stories_500  AS SELECT * FROM native_stories_1M WHERE "num"<
 CREATE TABLE native_stories_100  AS SELECT * FROM native_stories_1M WHERE "num"<=      100;
 ```
 
+```SQL
+-- same done in SQLite
+CREATE TABLE native_stories_500K AS SELECT * FROM native_stories_1M WHERE "num"<=  500000; -- ~960ms
+CREATE TABLE native_stories_100K AS SELECT * FROM native_stories_1M WHERE "num"<=  100000; -- ~330ms
+CREATE TABLE native_stories_50K  AS SELECT * FROM native_stories_1M WHERE "num"<=   50000; -- ~263ms
+CREATE TABLE native_stories_25K  AS SELECT * FROM native_stories_1M WHERE "num"<=   25000; -- ~208ms
+CREATE TABLE native_stories_10K  AS SELECT * FROM native_stories_1M WHERE "num"<=   10000; -- ~198ms
+CREATE TABLE native_stories_5K   AS SELECT * FROM native_stories_1M WHERE "num"<=    5000; -- ~203ms
+CREATE TABLE native_stories_1K   AS SELECT * FROM native_stories_1M WHERE "num"<=    1000; -- ~185ms
+CREATE TABLE native_stories_500  AS SELECT * FROM native_stories_1M WHERE "num"<=     500; -- ~177ms
+CREATE TABLE native_stories_100  AS SELECT * FROM native_stories_1M WHERE "num"<=     100; -- ~183ms
+```
+
+
 Native table row count and storage size statistics:
 
 | ROWS | BYTES  | FETCH 1000 (x5 times)        | AVG MS | MS/1000 ROWS  | 
