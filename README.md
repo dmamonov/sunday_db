@@ -243,6 +243,17 @@ SELECT * FROM native_stories_5k_indexed WHERE complexity=99 ORDER BY "num";
 -- 112, 97, 179, 95, 81, 171
 ```
 
+```SQL
+-- same for SQLite:
+
+CREATE TABLE native_stories_5k_indexed AS SELECT * FROM native_stories_5k; --29ms
+CREATE INDEX i_native_stories_5k_indexed__complexity ON native_stories_5k_indexed(complexity); --18ms
+
+SELECT * FROM native_stories_5k WHERE complexity=99 ORDER BY "num"; --253ms
+
+SELECT * FROM native_stories_5k_indexed WHERE complexity=99 ORDER BY "num"; --~100ms
+```
+
 For 100k items:
 ```SQL
 CREATE TABLE native_stories_100k_indexed AS SELECT * FROM native_stories_100k;
@@ -252,6 +263,18 @@ SELECT * FROM native_stories_100k WHERE complexity=99 ORDER BY "num";
 -- 191, 148 108, 167, 95, 136
 
 SELECT * FROM native_stories_100k_indexed WHERE complexity=99 ORDER BY "num";
+-- 73, 107, 96, 84, 139 82
+```
+
+```SQL
+-- same for SQLite
+CREATE TABLE native_stories_100k_indexed AS SELECT * FROM native_stories_100k; --194ms
+CREATE INDEX i_native_stories_100k_indexed__complexity ON native_stories_100k_indexed(complexity); --72ms
+
+SELECT * FROM native_stories_100k WHERE complexity=99 ORDER BY "num"; --407ms
+-- 191, 148 108, 167, 95, 136
+
+SELECT * FROM native_stories_100k_indexed WHERE complexity=99 ORDER BY "num";--131 ms
 -- 73, 107, 96, 84, 139 82
 ```
 
