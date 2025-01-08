@@ -272,10 +272,8 @@ CREATE TABLE native_stories_100k_indexed AS SELECT * FROM native_stories_100k; -
 CREATE INDEX i_native_stories_100k_indexed__complexity ON native_stories_100k_indexed(complexity); --72ms
 
 SELECT * FROM native_stories_100k WHERE complexity=99 ORDER BY "num"; --407ms
--- 191, 148 108, 167, 95, 136
 
 SELECT * FROM native_stories_100k_indexed WHERE complexity=99 ORDER BY "num";--131 ms
--- 73, 107, 96, 84, 139 82
 ```
 
 
