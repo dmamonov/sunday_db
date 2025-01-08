@@ -93,6 +93,70 @@ SELECT
 FROM generate_series(1,1_000_000) AS gs(id);
 ```
 
+```SQL
+-- Insert 1,000,000 rows into the table (SQLite alternative)
+WITH RECURSIVE sequence(id) AS (
+    SELECT 1
+    UNION ALL
+    SELECT id + 1
+    FROM sequence
+    WHERE id < 1000000
+)
+INSERT INTO native_stories_1M (
+    num,
+    title,
+    epic,
+    description,
+    created_date,
+    due_date,
+    status,
+    priority,
+    complexity,
+    is_active
+)
+SELECT
+    id AS num,
+    (SELECT GROUP_CONCAT(
+                    CASE
+                        WHEN RANDOM() % 10 = 0 THEN ' '
+                        ELSE CHAR(65 + (ABS(RANDOM()) % 26))
+                        END,
+                    ''
+            )
+     FROM sequence seq
+     WHERE seq.id <= (ABS(RANDOM()) % 50 + 5)) AS title,
+    (SELECT GROUP_CONCAT(
+                    CASE
+                        WHEN RANDOM() % 10 = 0 THEN ' '
+                        ELSE CHAR(65 + (ABS(RANDOM()) % 26))
+                        END,
+                    ''
+            )
+     FROM sequence seq
+     WHERE seq.id <= (ABS(RANDOM()) % 20 + 5)) AS epic,
+    (SELECT GROUP_CONCAT(
+                    CASE
+                        WHEN RANDOM() % 10 = 0 THEN ' '
+                        ELSE CHAR(65 + (ABS(RANDOM()) % 26))
+                        END,
+                    ''
+            )
+     FROM sequence seq
+     WHERE seq.id <= (ABS(RANDOM()) % 1000)) AS description,
+    DATETIME('now', printf('-%d days', id % 30)) AS created_date,
+    DATETIME('now', printf('+%d days', id % 30)) AS due_date,
+    CASE ROUND(RANDOM() % 4)
+        WHEN 0 THEN 'Not Started'
+        WHEN 1 THEN 'In Progress'
+        ELSE 'Completed'
+        END AS status,
+    ROUND(RANDOM() % 5) AS priority,
+    ROUND(RANDOM() % 100) AS complexity,
+    RANDOM() > 0.8 AS is_active
+FROM "sequence";
+-- 1804ms
+```
+
 Now fill other native examples using the generated data as a source:
 ```SQL
 CREATE TABLE native_stories_500K AS SELECT * FROM native_stories_1M WHERE "num"<=  500_000; -- ~2 sec
